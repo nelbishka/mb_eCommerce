@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 // Enable CORS for requests from the frontend
 app.use(cors({
-  origin: 'https://mb-e-commerce.netlify.app/', // Adjust this to your frontend's URL
+  origin: 'https://mb-e-commerce.netlify.app', // Adjust this to your frontend's URL
 }));
 
 // Nodemailer transport setup
