@@ -1,6 +1,5 @@
 import { makeStyles } from '@mui/styles';
 
-
 const toolbarHeight = 64; 
 
 
@@ -33,6 +32,11 @@ export default makeStyles(() => ({
   },
   cardDetails: {
     display: 'flex',
+    '@media (max-width: 599px)': {
+      display:'flex',
+      flexDirection:'column',
+      alignItems:'center'
+    },
     marginTop: '10%',
     width: '100%',
     justifyContent: 'space-between',
