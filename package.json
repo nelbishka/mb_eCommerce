@@ -4,9 +4,8 @@
   "private": true,
   "main": "server.mjs",
   "type": "module",
-  
   "dependencies": {
-    "@chec/commerce.js": "^2.8.0",
+    "@chec/commerce.js": "^1.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.17",
@@ -29,7 +28,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.51.4",
     "react-router-dom": "^6.23.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^3.0.1",
     "stream-browserify": "^3.0.0",
     "web-vitals": "^2.1.4"
   },
