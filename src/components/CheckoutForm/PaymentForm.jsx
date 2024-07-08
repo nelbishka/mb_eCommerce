@@ -4,19 +4,18 @@ import Review from './Review';
 
 const PaymentForm = ({ checkoutToken, shippingData, backStep, onCaptureCheckout, nextStep }) => {
   const handleSubmit = async (event) => {
+
     event.preventDefault();
+
     const orderData = {
       line_items: checkoutToken.line_items,
-      customer: { firstname: shippingData.firstname, lastname: shippingData.lastname, email: shippingData.email, phoneNumber: shippingData.phoneNumber },
-      // shipping: {
-      //   name: 'Primary',
-      //   street: shippingData.address1,
-      //   town_city: shippingData.city,
-      //   postal_zip_code: shippingData.zip,
-      // },
-      // fulfillment: { shipping_method: shippingData.shippingOption },
+      customer: { 
+        firstname: shippingData.firstName, 
+        lastname: shippingData.lastName, 
+        email: shippingData.email, 
+        phoneNumber: shippingData.phoneNumber },
     };
-    console.log(shippingData)
+      console.log(checkoutToken.line_items)
     try {
       await onCaptureCheckout(checkoutToken.id, orderData);
       await sendConfirmationEmail(shippingData.email, orderData);
@@ -40,7 +39,7 @@ const PaymentForm = ({ checkoutToken, shippingData, backStep, onCaptureCheckout,
         throw new Error(`Unsuccessful response (${response.status}): ${response.statusText}`);
       }
   
-      const result = await response.json();
+      const result = await response.text();
       return result;
     } catch (error) {
       console.error('Error sending confirmation email:', error);

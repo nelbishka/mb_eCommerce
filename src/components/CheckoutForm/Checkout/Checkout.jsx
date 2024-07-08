@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import {Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button} from '@mui/material'
-
+import {Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button, CssBaseline} from '@mui/material'
+import {Link} from 'react-router-dom'
 import {commerce} from '../../../library/commerce'
 import useStyles from './styles'
 import AddressForm from '../AddressForm'
@@ -20,11 +20,9 @@ const Checkout = ({cart, order, onCaptureCheckout, error}) => {
             try {
                 const token = await commerce.checkout.generateToken(cart.id, {type : 'cart'})
 
-                console.log(token);
-
                 setCheckoutToken(token)
             } catch (error) {
-                
+                console.log(error)
             }
         }
         generateToken();
@@ -44,9 +42,29 @@ const Checkout = ({cart, order, onCaptureCheckout, error}) => {
         nextStep();
     }
 
-    const Confirmation = () => (
-        <div>Confirmation</div>
-    )
+    let Confirmation = () => order.customer ? (
+        <>
+            <div>
+                <Typography variant='h5'>Thank you for your purchase!</Typography> <br/>
+                <Typography variant='h7'>You should receive the information on your email.</Typography>
+                <Divider className={classes.divider} />
+            </div>
+            <br/>
+            <Button variant='outlined' component={Link} to='/' type='button'>Back to Home</Button>
+        </>
+    ) : (
+        <div>
+            <CircularProgress />
+        </div>
+    );
+
+    if(error) {
+        <>
+            <Typography variant='h5'>Error: {error}</Typography>
+            <br/>
+            <Button variant='outlined' component={Link} to='/' type='button'>Back to Home</Button>
+        </>
+    }
 
     const Form = () => activeStep===0
         ? <AddressForm checkoutToken={checkoutToken} next={next} />
@@ -54,6 +72,7 @@ const Checkout = ({cart, order, onCaptureCheckout, error}) => {
 
   return (
     <>
+        <CssBaseline/>
         <div className={classes.toolbar} />
         <main className={classes.layout}>
             <Paper className={classes.paper}>
