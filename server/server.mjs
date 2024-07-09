@@ -71,18 +71,37 @@ app.post('/send-confirmation-email', (req, res) => {
       res.status(200).json({ message: 'Email sent successfully', info });
     }
   });
+
+  const adminMailOptions = {
+    from: '"mb E-commerce" <bishkaneli@gmail.com>',
+    to: 'bishkaneli@gmail.com',
+    subject: 'New Order Placed',
+    text: `You have a new order!\n\n` +
+    `Order Details:\n` +
+    `Customer Name: ${orderData.customer.firstname} ${orderData.customer.lastname}\n` +
+    `Email: ${orderData.customer.email}\n` +
+    `Phone Number: ${orderData.customer.phoneNumber}\n` +
+    `Products:\n` +
+    orderData.line_items.map(item => 
+      `- ${item.name} - Price: ${item.price.formatted_with_code}, Quantity: ${item.quantity}`
+    ).join('\n') + '\n\n' +
+    `Total Price: ${formattedTotalPrice} ALL`
+    };
+
+  transporter.sendMail(adminMailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email:', error);
+      return res.status(500).send('Error sending email: ' + error.message);
+    } else {
+      console.log('Admin email sent: ' + info.response);
+      res.status(200).json({ message: 'Email sent successfully', info });
+    }
+  });
 });
 
 // Route to capture checkout details
 app.post('/capture-checkout', (req, res) => {
   const { checkoutToken, orderData } = req.body;
-
-  console.log('Checkout token:', checkoutToken);
-  console.log('Order data:', orderData);
-  console.log('Request Body:', req.body);
-
-
-
 
 
   // Mock response for successful capture
