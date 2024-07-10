@@ -69,11 +69,11 @@ const App = () => {
   
       const result = await response.json();
       setOrder(newOrder)
-      console.log('Capture checkout response:', result); // Log successful response
+      console.log('Capture checkout response:', result); 
       await refreshCart();
       return result;
     } catch (error) {
-      console.error('Error capturing checkout:', error); // Log any errors
+      console.error('Error capturing checkout:', error); 
       throw error;
     }
   };

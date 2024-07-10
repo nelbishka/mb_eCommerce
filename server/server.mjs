@@ -4,26 +4,27 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';  
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
 const app = express();
 const port = 5000;
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const formatCurrency = (amount) => {
   return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 };
 
-
 app.use(bodyParser.json());
-
 
 app.use(cors({
   origin: 'https://mb-e-commerce.netlify.app/', 
 }));
 
 app.use(express.static(path.join(__dirname, './build')));
-
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -102,11 +103,16 @@ app.post('/send-confirmation-email', (req, res) => {
   });
 });
 
-
 app.post('/capture-checkout', (req, res) => {
   const { checkoutToken, orderData } = req.body;
 
   res.status(200).json({ success: true, orderData });
+});
+
+app.use(express.static(path.join(__dirname, './build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './build', 'index.html'));
 });
 
 app.listen(port, () => {
