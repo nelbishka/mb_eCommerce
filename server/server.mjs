@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';  
 
 dotenv.config();
 
@@ -13,15 +14,17 @@ const formatCurrency = (amount) => {
   return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 };
 
-// Middleware to parse JSON bodies
+
 app.use(bodyParser.json());
 
-// Enable CORS for requests from the frontend
+
 app.use(cors({
-  origin: 'https://mb-e-commerce.netlify.app/', // Adjust this to your frontend's URL
+  origin: 'https://mb-e-commerce.netlify.app/', 
 }));
 
-// Nodemailer transport setup
+app.use(express.static(path.join(__dirname, './build')));
+
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -30,7 +33,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Route to send a confirmation email
+
 app.post('/send-confirmation-email', (req, res) => {
   const { email, orderData } = req.body;
 
@@ -71,25 +74,41 @@ app.post('/send-confirmation-email', (req, res) => {
       res.status(200).json({ message: 'Email sent successfully', info });
     }
   });
+
+  const adminMailOptions = {
+    from: '"mb E-commerce" <bishkaneli@gmail.com>',
+    to: 'bishkaneli@gmail.com',
+    subject: 'New Order Placed',
+    text: `You have a new order!\n\n` +
+    `Order Details:\n` +
+    `Customer Name: ${orderData.customer.firstname} ${orderData.customer.lastname}\n` +
+    `Email: ${orderData.customer.email}\n` +
+    `Phone Number: ${orderData.customer.phoneNumber}\n` +
+    `Products:\n` +
+    orderData.line_items.map(item => 
+      `- ${item.name} - Price: ${item.price.formatted_with_code}, Quantity: ${item.quantity}`
+    ).join('\n') + '\n\n' +
+    `Total Price: ${formattedTotalPrice} ALL`
+    };
+
+  transporter.sendMail(adminMailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email:', error);
+      return res.status(500).send('Error sending email: ' + error.message);
+    } else {
+      console.log('Admin email sent: ' + info.response);
+      res.status(200).json({ message: 'Email sent successfully', info });
+    }
+  });
 });
 
-// Route to capture checkout details
+
 app.post('/capture-checkout', (req, res) => {
   const { checkoutToken, orderData } = req.body;
 
-  console.log('Checkout token:', checkoutToken);
-  console.log('Order data:', orderData);
-  console.log('Request Body:', req.body);
-
-
-
-
-
-  // Mock response for successful capture
   res.status(200).json({ success: true, orderData });
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
