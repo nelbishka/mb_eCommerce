@@ -109,10 +109,10 @@ app.post('/capture-checkout', (req, res) => {
   res.status(200).json({ success: true, orderData });
 });
 
-app.use(express.static(path.join(__dirname, './build')));
+app.use(express.static(path.join(__dirname, './newEcom/mb_eCommerce/build')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './mb_eCommerce/build', 'index.html'));
+  res.sendFile(path.join(__dirname, './newEcom/mb_eCommerce/build', 'index.html'));
 });
 
 app.listen(port, () => {
