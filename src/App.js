@@ -55,7 +55,7 @@ const App = () => {
   
   const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
     try {
-      const response = await fetch('http://localhost:5000/capture-checkout', {
+      const response = await fetch('https://mb-ecommerce.onrender.com/capture-checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
