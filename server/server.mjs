@@ -21,7 +21,7 @@ const formatCurrency = (amount) => {
 app.use(bodyParser.json());
 
 app.use(cors({
-  origin: 'https://mb-e-commerce.netlify.app/', 
+  origin: 'https://mb-e-commerce.netlify.app', 
 }));
 
 app.use(express.static(path.join(__dirname, './build')));
