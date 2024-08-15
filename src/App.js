@@ -55,7 +55,7 @@ const App = () => {
   
   const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
     try {
-      const response = await fetch('https://mb-ecommerce.onrender.com/capture-checkout', {
+      const response = await fetch('https://ecommerceserver-875ceb902d32.herokuapp.com/capture-checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,6 +73,7 @@ const App = () => {
       await refreshCart();
       return result;
     } catch (error) {
+      setErrorMessage(error)
       console.error('Error capturing checkout:', error); 
       throw error;
     }
