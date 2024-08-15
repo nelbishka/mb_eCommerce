@@ -27,7 +27,7 @@ const PaymentForm = ({ checkoutToken, shippingData, backStep, onCaptureCheckout,
 
   const sendConfirmationEmail = async (email, orderData) => {
     try {
-      const response = await fetch('https://mb-ecommerce.onrender.com/send-confirmation-email', {
+      const response = await fetch('https://ecommerceserver-875ceb902d32.herokuapp.com/send-confirmation-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
