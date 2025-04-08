@@ -43,7 +43,7 @@ const Checkout = () => {
           })),
         };
   
-        const response = await fetch('http://localhost:5000/send-confirmation-email', {
+        const response = await fetch('https://ecommerceserver-gbsh.onrender.com/send-confirmation-email', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
