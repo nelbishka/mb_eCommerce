@@ -5,12 +5,14 @@ import useStyles from './styles';
 const CartItem = ({ item, onUpdateCartQty, onRemoveFromCart }) => {
   const classes = useStyles();
 
+  const lineTotal = (item.price.raw * item.quantity).toFixed(2);
+
   return (
     <Card>
-      <CardMedia image={item.image.url} alt={item.name} className={classes.media} />
+      <CardMedia image={item.image} alt={item.name} className={classes.media} />
       <CardContent>
-        <Typography variant='h4'>{item.name}</Typography>
-        <Typography variant='h5'>{item.line_total.formatted_with_code}</Typography>
+        <Typography variant='h5'>{item.name}</Typography>
+        <Typography variant='h6'>ALL {lineTotal}</Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
         <div className={classes.buttons}>

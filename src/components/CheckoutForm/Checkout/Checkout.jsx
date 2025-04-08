@@ -1,94 +1,159 @@
-import React, {useState, useEffect} from 'react'
-import {Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button, CssBaseline} from '@mui/material'
-import {Link} from 'react-router-dom'
-import {commerce} from '../../../library/commerce'
-import useStyles from './styles'
-import AddressForm from '../AddressForm'
-import PaymentForm from '../PaymentForm'
+import React, { useState } from 'react';
+import { Paper, Typography, Divider, Button, TextField, CircularProgress, CssBaseline } from '@mui/material';
+import { Link } from 'react-router-dom';
+import useStyles from './styles';
+import { useCart } from '../../Cart/CartContext'; 
 
-const steps = ['Shipping address', 'Payment Details']
 
-const Checkout = ({cart, order, onCaptureCheckout, error}) => {
-
-    const [activeStep, setActiveStep] = useState(0)
-    const [checkoutToken, setCheckoutToken] = useState(null)
-    const [shippingData, setShippingData] = useState({})
+const Checkout = () => {
     const classes = useStyles();
-
-    useEffect(()=>{
-        const generateToken = async () => {
-            try {
-                const token = await commerce.checkout.generateToken(cart.id, {type : 'cart'})
-
-                setCheckoutToken(token)
-            } catch (error) {
-                console.log(error)
-            }
+    const { cartItems } = useCart();  
+    const [shippingData, setShippingData] = useState({
+      firstname: '',
+      lastname: '',
+      email: '',
+      phoneNumber: '',
+      address: '',
+    });
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [confirmationMessage, setConfirmationMessage] = useState(null);
+  
+    const handleChange = (e) => {
+      setShippingData({
+        ...shippingData,
+        [e.target.name]: e.target.value,
+      });
+    };
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setLoading(true);
+  
+      try {
+        const orderData = {
+          customer: shippingData,
+          line_items: cartItems.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: {
+              formatted_with_code: item.price.formatted_with_code,
+              raw: item.price.raw,
+            },
+          })),
+        };
+  
+        const response = await fetch('http://localhost:5000/send-confirmation-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: shippingData.email,
+            orderData,
+          }),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to send email');
         }
-        generateToken();
-    },[cart])
-
-    const nextStep= () => {
-        setActiveStep((prevActiveStep)=>prevActiveStep+1);
-
-    }
-
-    const backStep= () => {
-        setActiveStep((prevActiveStep)=>prevActiveStep-1);
-    }
-
-    const next = (data) => {
-        setShippingData(data);
-        nextStep();
-    }
-
-    let Confirmation = () => order.customer ? (
-        <>
-            <div>
-                <Typography variant='h5'>Thank you for your purchase!</Typography> <br/>
-                <Typography variant='h7'>You should receive the information on your email.</Typography>
-                <Divider className={classes.divider} />
-            </div>
-            <br/>
-            <Button variant='outlined' component={Link} to='/' type='button'>Back to Home</Button>
-        </>
-    ) : (
-        <div>
-            <CircularProgress />
-        </div>
-    );
-
-    if(error) {
-        <>
-            <Typography variant='h5'>Error: {error}</Typography>
-            <br/>
-            <Button variant='outlined' component={Link} to='/' type='button'>Back to Home</Button>
-        </>
-    }
-
-    const Form = () => activeStep===0
-        ? <AddressForm checkoutToken={checkoutToken} next={next} />
-        : <PaymentForm shippingData={shippingData} checkoutToken={checkoutToken} backStep={backStep} onCaptureCheckout={onCaptureCheckout} nextStep={nextStep} />
+  
+        setLoading(false);
+        setConfirmationMessage('Order placed successfully! Confirmation email has been sent.');
+      } catch (error) {
+        setLoading(false);
+        setErrorMessage(error.message);
+      }
+    };
+  
 
   return (
     <>
-        <CssBaseline/>
-        <div className={classes.toolbar} />
-        <main className={classes.layout}>
-            <Paper className={classes.paper}>
-                <Typography variant='h4' align='center'>Checkout</Typography>
-                <Stepper activeStep={activeStep} className={classes.stepper}>
-                    {steps.map((step)=>(
-                        <Step key={step}>
-                            <StepLabel>{step}</StepLabel>
-                        </Step>
-                    ))}
-                </Stepper>
-                {activeStep=== steps.length ? <Confirmation /> : checkoutToken && <Form />}
-            </Paper>
-        </main>
-    </>
-  )
-}
+      <CssBaseline />
+      <div className={classes.toolbar} />
+      <main className={classes.layout}>
+        <Paper className={classes.paper}>
+          <Typography variant="h4" align="center">
+            Checkout
+          </Typography>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <TextField
+                label="First Name"
+                name="firstname"
+                value={shippingData.firstname}
+                onChange={handleChange}
+                fullWidth
+                required
+                margin="normal"
+              />
+              <TextField
+                label="Last Name"
+                name="lastname"
+                value={shippingData.lastname}
+                onChange={handleChange}
+                fullWidth
+                required
+                margin="normal"
+              />
+              <TextField
+                label="Email"
+                name="email"
+                value={shippingData.email}
+                onChange={handleChange}
+                fullWidth
+                required
+                margin="normal"
+              />
+              <TextField
+                label="Phone Number"
+                name="phoneNumber"
+                value={shippingData.phoneNumber}
+                onChange={handleChange}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Address"
+                name="address"
+                value={shippingData.address}
+                onChange={handleChange}
+                fullWidth
+                required
+                margin="normal"
+              />
+              <Button variant="contained" color="primary" type="submit">
+                Submit Order
+              </Button>
+            </form>
+          )}
 
-export default Checkout
+          {confirmationMessage && (
+            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+              <Typography variant="h6" color="primary">
+                {confirmationMessage}
+              </Typography>
+
+              <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                <Typography variant="body2" component={Link} to="/" style={{ textDecoration: 'none', color: '#3f51b5' }}>
+                  Back to Shopping
+                </Typography>
+              </div>
+            </div>
+          )}
+
+          {errorMessage && (
+            <Typography variant="body1" color="error" style={{ marginTop: '20px', textAlign: 'center' }}>
+              Error: {errorMessage}
+            </Typography>
+            
+          )}
+        </Paper>
+      </main>
+    </>
+  );
+};
+
+export default Checkout;
