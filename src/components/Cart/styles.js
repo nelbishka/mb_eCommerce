@@ -37,7 +37,7 @@ export default makeStyles(() => ({
       flexDirection:'column',
       alignItems:'center'
     },
-    marginTop: '10%',
+    marginTop: '40px',
     width: '100%',
     justifyContent: 'space-between',
   },

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Products, Navbar, Cart, Checkout } from './components/index.js'
 import { Routes, Route } from 'react-router-dom'
 import { CartProvider, useCart } from './components/Cart/CartContext.jsx';
+import nike from './assets/nike-authentic.jpeg'
 
 
 const App = () => {
@@ -16,9 +17,16 @@ const App = () => {
     const mockProducts = [
       {
         id: 'prod-1',
-        name: 'Modern Chair',
+        name: 'Nike Origjinale',
         price: { raw: 129.99, formatted_with_code: 'ALL 129.99' },
         description: 'A comfy modern chair.',
+        image: nike,
+      },
+      {
+        id: 'prod-2',
+        name: 'Vintage Lamp',
+        price: { raw: 89.99, formatted_with_code: 'ALL 89.99' },
+        description: 'A stylish vintage lamp.',
         image: { url: 'https://via.placeholder.com/300' },
       },
       {
@@ -28,6 +36,63 @@ const App = () => {
         description: 'A stylish vintage lamp.',
         image: { url: 'https://via.placeholder.com/300' },
       },
+      {
+        id: 'prod-2',
+        name: 'Vintage Lamp',
+        price: { raw: 89.99, formatted_with_code: 'ALL 89.99' },
+        description: 'A stylish vintage lamp.',
+        image: { url: 'https://via.placeholder.com/300' },
+      },
+      {
+        id: 'prod-2',
+        name: 'Vintage Lamp',
+        price: { raw: 89.99, formatted_with_code: 'ALL 89.99' },
+        description: 'A stylish vintage lamp.',
+        image: { url: 'https://via.placeholder.com/300' },
+      },
+      {
+        id: 'prod-2',
+        name: 'Vintage Lamp',
+        price: { raw: 89.99, formatted_with_code: 'ALL 89.99' },
+        description: 'A stylish vintage lamp.',
+        image: { url: 'https://via.placeholder.com/300' },
+      },
+      {
+        id: 'prod-2',
+        name: 'Vintage Lamp',
+        price: { raw: 89.99, formatted_with_code: 'ALL 89.99' },
+        description: 'A stylish vintage lamp.',
+        image: { url: 'https://via.placeholder.com/300' },
+      },
+      {
+        id: 'prod-2',
+        name: 'Vintage Lamp',
+        price: { raw: 89.99, formatted_with_code: 'ALL 89.99' },
+        description: 'A stylish vintage lamp.',
+        image: { url: 'https://via.placeholder.com/300' },
+      },
+      {
+        id: 'prod-2',
+        name: 'Vintage Lamp',
+        price: { raw: 89.99, formatted_with_code: 'ALL 89.99' },
+        description: 'A stylish vintage lamp.',
+        image: { url: 'https://via.placeholder.com/300' },
+      },
+      {
+        id: 'prod-2',
+        name: 'Vintage Lamp',
+        price: { raw: 89.99, formatted_with_code: 'ALL 89.99' },
+        description: 'A stylish vintage lamp.',
+        image: { url: 'https://via.placeholder.com/300' },
+      },
+      {
+        id: 'prod-2',
+        name: 'Vintage Lamp',
+        price: { raw: 89.99, formatted_with_code: 'ALL 89.99' },
+        description: 'A stylish vintage lamp.',
+        image: { url: 'https://via.placeholder.com/300' },
+      },
+
     ];
     setProducts(mockProducts);
   }

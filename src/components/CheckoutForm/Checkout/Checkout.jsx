@@ -59,7 +59,7 @@ const Checkout = () => {
         }
   
         setLoading(false);
-        setConfirmationMessage('Order placed successfully! Confirmation email has been sent.');
+        setConfirmationMessage('Order placed successfully! Confirmation email sent.');
       } catch (error) {
         setLoading(false);
         setErrorMessage(error.message);

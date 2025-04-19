@@ -14,7 +14,7 @@ const Cart = () => {
   return (
     <Container>
       <div className={classes.toolbar} />
-      <Typography className={classes.title} variant="h3">Your Shopping Cart</Typography>
+      <Typography className={classes.title} sx={{fontSize:{xs: '2rem', sm:'2rem', md:'2.5rem'}}} variant="h3" marginBottom='20px'>Your Shopping Cart</Typography>
       {isEmpty ? (
         <Typography variant="subtitle1">
           You have no items in your shopping cart.
@@ -31,7 +31,7 @@ const Cart = () => {
           </Grid>
           <div className={classes.cardDetails}>
             <Typography variant="h4">
-              Subtotal: ${cartItems.reduce((total, item) => total + item.price.raw * item.quantity, 0).toFixed(2)}
+              Subtotal: ALL {cartItems.reduce((total, item) => total + item.price.raw * item.quantity, 0).toFixed(2)}
             </Typography>
             <div className={classes.buttons}>
               <Button className={classes.emptyButton} size="large" type="button" variant="contained" color="error" onClick={emptyCart}>Empty Cart</Button>

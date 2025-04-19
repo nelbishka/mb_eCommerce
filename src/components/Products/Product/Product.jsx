@@ -7,7 +7,7 @@ const Product = ({ product }) => {
 
   return (
     <Card>
-      <CardMedia image={product.image.url} title={product.name} style={{ height: 260 }} />
+      <CardMedia image={product.image} title={product.name} style={{ height: 350 }} />
       <CardContent>
         <Typography variant="h5">{product.name}</Typography>
         <Typography variant="h6">{product.price.formatted_with_code}</Typography>

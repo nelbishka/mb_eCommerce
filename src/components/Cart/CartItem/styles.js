@@ -2,8 +2,8 @@ import { makeStyles } from '@mui/styles';
 
 export default makeStyles(() => ({
   media: {
-    height: 260,
-    width : '50%',
+    height: 350,
+    width : '100%',
     margin : 'auto'
   },
   cardContent: {
